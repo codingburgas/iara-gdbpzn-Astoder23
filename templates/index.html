@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Начало{% endblock %}
+{% block page_title %}Информационна система на ИАРА{% endblock %}
+{% block page_subtitle %}Изпълнителна Агенция по Рибарство и Аквакултури — България{% endblock %}
+
+{% block content %}
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="icon">⚓</div>
+    <div class="number">{{ stats.koraби }}</div>
+    <div class="label">Регистрирани кораби</div>
+  </div>
+  <div class="stat-card">
+    <div class="icon">📋</div>
+    <div class="number">{{ stats.razreshitelni }}</div>
+    <div class="label">Разрешителни</div>
+  </div>
+  <div class="stat-card">
+    <div class="icon">🎫</div>
+    <div class="number">{{ stats.bileti }}</div>
+    <div class="label">Издадени билети</div>
+  </div>
+  <div class="stat-card">
+    <div class="icon">🔍</div>
+    <div class="number">{{ stats.inspektsii }}</div>
+    <div class="label">Инспекции</div>
+  </div>
+</div>
+
+<div class="quick-links">
+  <a href="/koraби/nov" class="quick-link">
+    <span class="ql-icon">⚓</span>
+    <span>Регистрирай нов кораб</span>
+  </a>
+  <a href="/razreshitelni/novo" class="quick-link">
+    <span class="ql-icon">📋</span>
+    <span>Издай разрешително</span>
+  </a>
+  <a href="/bileti/nov" class="quick-link">
+    <span class="ql-icon">🎫</span>
+    <span>Купи билет за риболов</span>
+  </a>
+  <a href="/inspektsii/nova" class="quick-link">
+    <span class="ql-icon">🔍</span>
+    <span>Регистрирай инспекция</span>
+  </a>
+  <a href="/dnevnik/nov" class="quick-link">
+    <span class="ql-icon">📓</span>
+    <span>Добави запис в дневник</span>
+  </a>
+  <a href="/koraби" class="quick-link">
+    <span class="ql-icon">📊</span>
+    <span>Виж всички кораби</span>
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h2>🐟 За системата</h2>
+  </div>
+  <div class="card-body">
+    <p style="color: var(--muted); line-height: 1.7; font-size: 0.9rem;">
+      Тази система управлява всички основни процеси на ИАРА — регистрация на риболовни кораби,
+      издаване на разрешителни и билети за любителски риболов, регистрация на инспекции
+      и воденe на електронен дневник на риболовните операции.
+    </p>
+  </div>
+</div>
+
+{% endblock %}

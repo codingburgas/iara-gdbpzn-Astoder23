@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Ново разрешително{% endblock %}
+{% block page_title %}📋 Издаване на разрешително{% endblock %}
+{% block page_subtitle %}Ново разрешително за риболов{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header"><h2>Данни за разрешителното</h2></div>
+  <div class="card-body">
+    <form method="POST">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Кораб *</label>
+          <select name="korab_id" required>
+            <option value="">-- Избери кораб --</option>
+            {% for k in koraби %}
+            <option value="{{ k.id }}">{{ k.mezhdunaroden_nomer }} — {{ k.markirovka or k.sobstvenik }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Номер на разрешителното *</label>
+          <input type="text" name="nomer" required placeholder="R-2024-001">
+        </div>
+        <div class="form-group">
+          <label>Собственик/Ползвател *</label>
+          <input type="text" name="sobstvenik" required placeholder="Иван Петров">
+        </div>
+        <div class="form-group">
+          <label>Капитан *</label>
+          <input type="text" name="kapitan" required placeholder="Георги Димитров">
+        </div>
+        <div class="form-group">
+          <label>Валидно до *</label>
+          <input type="date" name="validen_do" required>
+        </div>
+        <div class="form-group span-2">
+          <label>Риболовни уреди</label>
+          <textarea name="uredi" placeholder="Мрежи, въдици, парагади..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">✅ Издай разрешително</button>
+        <a href="/razreshitelni" class="btn btn-outline">Отказ</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

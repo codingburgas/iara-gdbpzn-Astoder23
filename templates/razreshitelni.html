@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Разрешителни{% endblock %}
+{% block page_title %}📋 Разрешителни за риболов{% endblock %}
+{% block page_subtitle %}Всички издадени разрешителни{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+  <p style="color:var(--muted); font-size:0.875rem;">Общо: <strong>{{ razreshitelni|length }}</strong></p>
+  <a href="/razreshitelni/novo" class="btn btn-primary">+ Ново разрешително</a>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    {% if razreshitelni %}
+    <table>
+      <thead>
+        <tr>
+          <th>Номер</th>
+          <th>Кораб</th>
+          <th>Собственик</th>
+          <th>Капитан</th>
+          <th>Валидно до</th>
+          <th>Статус</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in razreshitelni %}
+        <tr>
+          <td><strong>{{ r.nomer }}</strong></td>
+          <td>{{ r.markirovka or r.mezhdunaroden_nomer }}</td>
+          <td>{{ r.sobstvenik }}</td>
+          <td>{{ r.kapitan }}</td>
+          <td>{{ r.validen_do }}</td>
+          <td>
+            {% if r.status == 'активно' %}
+              <span class="badge badge-success">Активно</span>
+            {% else %}
+              <span class="badge badge-danger">Отнето</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if r.status == 'активно' %}
+            <a href="/razreshitelni/{{ r.id }}/otnemane" class="btn btn-sm btn-danger"
+               onclick="return confirm('Сигурен ли си, че искаш да отнемеш разрешителното?')">
+              Отнеми
+            </a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <p>Няма издадени разрешителни.</p>
+      <a href="/razreshitelni/novo" class="btn btn-primary" style="margin-top:1rem;">Издай разрешително</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

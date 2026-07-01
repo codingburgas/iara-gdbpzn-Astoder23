@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Билети{% endblock %}
+{% block page_title %}🎫 Билети за любителски риболов{% endblock %}
+{% block page_subtitle %}Всички издадени билети{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+  <p style="color:var(--muted); font-size:0.875rem;">Общо: <strong>{{ bileti|length }}</strong> билета</p>
+  <a href="/bileti/nov" class="btn btn-primary">+ Нов билет</a>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    {% if bileti %}
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Притежател</th>
+          <th>ЕГН</th>
+          <th>Тип</th>
+          <th>Категория</th>
+          <th>Цена</th>
+          <th>Валидно до</th>
+          <th>Статус</th>
+          <th>Проверка</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bileti %}
+        <tr>
+          <td style="color:var(--muted);">{{ b.id }}</td>
+          <td><strong>{{ b.ime }}</strong></td>
+          <td style="font-family:monospace;">{{ b.egn }}</td>
+          <td>{{ b.tip }}</td>
+          <td>{{ b.kategoriya }}</td>
+          <td>
+            {% if b.cena == 0 %}
+              <span class="badge badge-success">Безплатен</span>
+            {% else %}
+              <strong>{{ "%.2f"|format(b.cena) }} лв.</strong>
+            {% endif %}
+          </td>
+          <td>{{ b.validen_do }}</td>
+          <td>
+            {% if b.status == 'активен' %}
+              <span class="badge badge-success">Активен</span>
+            {% else %}
+              <span class="badge badge-danger">Изтекъл</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="/bileti/{{ b.id }}/proverka" class="btn btn-sm btn-outline">🔍 Провери</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">🎫</div>
+      <p>Няма издадени билети.</p>
+      <a href="/bileti/nov" class="btn btn-primary" style="margin-top:1rem;">Купи билет</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

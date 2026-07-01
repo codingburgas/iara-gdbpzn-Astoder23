@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Инспекции{% endblock %}
+{% block page_title %}🔍 Инспекции{% endblock %}
+{% block page_subtitle %}Регистър на всички проверки{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+  <p style="color:var(--muted); font-size:0.875rem;">Общо: <strong>{{ inspektsii|length }}</strong> инспекции</p>
+  <a href="/inspektsii/nova" class="btn btn-primary">+ Нова инспекция</a>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    {% if inspektsii %}
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Инспектор</th>
+          <th>Обект</th>
+          <th>Тип обект</th>
+          <th>Дата</th>
+          <th>Резултат</th>
+          <th>Нарушение</th>
+          <th>Глоба</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in inspektsii %}
+        <tr>
+          <td style="color:var(--muted);">{{ i.id }}</td>
+          <td><strong>{{ i.inspektor }}</strong></td>
+          <td>{{ i.obekt_ime }}</td>
+          <td>{{ i.obekt_tip }}</td>
+          <td>{{ i.data }}</td>
+          <td>
+            {% if i.rezultat == 'без нарушение' %}
+              <span class="badge badge-success">Без нарушение</span>
+            {% else %}
+              <span class="badge badge-danger">Нарушение</span>
+            {% endif %}
+          </td>
+          <td style="max-width:200px; font-size:0.8rem;">{{ i.narushenie or '—' }}</td>
+          <td>
+            {% if i.globa %}
+              <strong style="color:var(--danger);">{{ "%.2f"|format(i.globa) }} лв.</strong>
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <p>Няма регистрирани инспекции.</p>
+      <a href="/inspektsii/nova" class="btn btn-primary" style="margin-top:1rem;">Регистрирай инспекция</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

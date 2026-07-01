@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Нова инспекция{% endblock %}
+{% block page_title %}🔍 Регистриране на инспекция{% endblock %}
+{% block page_subtitle %}Нова проверка от инспектор{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header"><h2>Данни за инспекцията</h2></div>
+  <div class="card-body">
+    <form method="POST">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Инспектор *</label>
+          <input type="text" name="inspektor" required placeholder="Петър Иванов">
+        </div>
+        <div class="form-group">
+          <label>Дата на проверката *</label>
+          <input type="date" name="data" required value="{{ today }}">
+        </div>
+
+        <div class="form-group">
+          <label>Тип обект *</label>
+          <select name="obekt_tip" required>
+            <option value="риболовен кораб">Риболовен кораб</option>
+            <option value="магазин">Магазин</option>
+            <option value="хладилен камион">Хладилен камион</option>
+            <option value="аквакултурен обект">Аквакултурен обект</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Наименование на обекта *</label>
+          <input type="text" name="obekt_ime" required placeholder="Кораб BGR-001 / Магазин Пресна риба">
+        </div>
+
+        <div class="form-group span-2">
+          <label>Резултат *</label>
+          <select name="rezultat" required id="rezultat" onchange="toggleNarushenie()">
+            <option value="без нарушение">Без нарушение</option>
+            <option value="нарушение">Нарушение</option>
+          </select>
+        </div>
+
+        <div class="form-group span-2" id="narushenieGroup" style="display:none;">
+          <label>Описание на нарушението</label>
+          <textarea name="narushenie" placeholder="Опишете нарушението..."></textarea>
+        </div>
+
+        <div class="form-group" id="globaGroup" style="display:none;">
+          <label>Размер на глобата (лв.)</label>
+          <input type="number" step="0.01" name="globa" placeholder="500.00">
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">✅ Регистрирай инспекцията</button>
+        <a href="/inspektsii" class="btn btn-outline">Отказ</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function toggleNarushenie() {
+  const val = document.getElementById('rezultat').value;
+  const show = val === 'нарушение';
+  document.getElementById('narushenieGroup').style.display = show ? 'flex' : 'none';
+  document.getElementById('globaGroup').style.display = show ? 'flex' : 'none';
+}
+</script>
+
+{% endblock %}

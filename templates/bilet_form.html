@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Нов билет{% endblock %}
+{% block page_title %}🎫 Купуване на билет{% endblock %}
+{% block page_subtitle %}Билет за любителски риболов{% endblock %}
+
+{% block content %}
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start;">
+
+<div class="card">
+  <div class="card-header"><h2>Данни за билета</h2></div>
+  <div class="card-body">
+    <form method="POST" id="biletForm">
+
+      <div class="form-grid cols-1">
+        <div class="form-group">
+          <label>Три имена *</label>
+          <input type="text" name="ime" required placeholder="Иван Петров Георгиев">
+        </div>
+        <div class="form-group">
+          <label>ЕГН *</label>
+          <input type="text" name="egn" required placeholder="8501011234" maxlength="10">
+        </div>
+
+        <div class="form-group">
+          <label>Категория *</label>
+          <select name="kategoriya" id="kategoriya" required onchange="updatePrice()">
+            <option value="възрастен">Възрастен (над 14г.)</option>
+            <option value="под 14г">Дете (под 14г.)</option>
+            <option value="пенсионер">Пенсионер</option>
+            <option value="инвалид">Инвалид (безплатен)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Срок на валидност *</label>
+          <select name="tip" id="tip" required onchange="updatePrice()">
+            <option value="годишен">Годишен</option>
+            <option value="месечен">Месечен</option>
+            <option value="дневен">Дневен</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="telkGroup" style="display:none;">
+          <label>Номер на решение ТЕЛК</label>
+          <input type="text" name="telk_nomer" id="telk_nomer" placeholder="ТЕЛК-2023-001">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">✅ Издай билет</button>
+        <a href="/bileti" class="btn btn-outline">Отказ</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div>
+  <div class="card">
+    <div class="card-header"><h2>💰 Цена</h2></div>
+    <div class="card-body" style="text-align:center; padding:2rem;">
+      <div id="priceDisplay" style="font-family:'Space Grotesk',sans-serif; font-size:3rem; font-weight:700; color:var(--ocean);">
+        30.00 лв.
+      </div>
+      <div id="priceLabel" style="color:var(--muted); font-size:0.875rem; margin-top:0.5rem;">
+        Годишен — Възрастен
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem;">
+    <div class="card-header"><h2>📊 Ценова таблица</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Тип</th><th>Възрастен</th><th>Дете</th><th>Пенсионер</th><th>Инвалид</th></tr></thead>
+        <tbody>
+          <tr><td>Годишен</td><td>30 лв.</td><td>10 лв.</td><td>15 лв.</td><td>Безплатен</td></tr>
+          <tr><td>Месечен</td><td>10 лв.</td><td>5 лв.</td><td>7 лв.</td><td>Безплатен</td></tr>
+          <tr><td>Дневен</td><td>5 лв.</td><td>2 лв.</td><td>3 лв.</td><td>Безплатен</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const prices = {
+  'годишен': {'възрастен': 30, 'под 14г': 10, 'пенсионер': 15, 'инвалид': 0},
+  'месечен': {'възрастен': 10, 'под 14г': 5, 'пенсионер': 7, 'инвалид': 0},
+  'дневен':  {'възрастен': 5,  'под 14г': 2, 'пенсионер': 3, 'инвалид': 0},
+};
+
+function updatePrice() {
+  const tip = document.getElementById('tip').value;
+  const kat = document.getElementById('kategoriya').value;
+  const price = prices[tip][kat];
+  const display = document.getElementById('priceDisplay');
+  const label = document.getElementById('priceLabel');
+  const telkGroup = document.getElementById('telkGroup');
+
+  if (price === 0) {
+    display.textContent = 'Безплатен';
+    display.style.color = '#2e9e6b';
+    telkGroup.style.display = kat === 'инвалид' ? 'flex' : 'none';
+  } else {
+    display.textContent = price.toFixed(2) + ' лв.';
+    display.style.color = 'var(--ocean)';
+    telkGroup.style.display = 'none';
+  }
+
+  const tipNames = {'годишен':'Годишен','месечен':'Месечен','дневен':'Дневен'};
+  const katNames = {'възрастен':'Възрастен','под 14г':'Дете под 14г.','пенсионер':'Пенсионер','инвалид':'Инвалид'};
+  label.textContent = tipNames[tip] + ' — ' + katNames[kat];
+}
+</script>
+
+{% endblock %}

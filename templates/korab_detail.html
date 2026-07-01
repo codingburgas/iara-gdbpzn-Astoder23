@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Кораб {{ korab.mezhdunaroden_nomer }}{% endblock %}
+{% block page_title %}⚓ {{ korab.markirovka or korab.mezhdunaroden_nomer }}{% endblock %}
+{% block page_subtitle %}Детайлна информация за кораба{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+  <a href="/koraби" class="btn btn-outline btn-sm">← Обратно</a>
+  <a href="/razreshitelni/novo" class="btn btn-primary btn-sm">+ Ново разрешително</a>
+  <a href="/dnevnik/nov" class="btn btn-primary btn-sm">+ Запис в дневник</a>
+</div>
+
+<div class="card" style="margin-bottom:1.25rem;">
+  <div class="card-header"><h2>📋 Основни данни</h2></div>
+  <div class="card-body">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <label>Международен номер</label>
+        <div class="value">{{ korab.mezhdunaroden_nomer }}</div>
+      </div>
+      <div class="detail-item">
+        <label>Маркировка</label>
+        <div class="value">{{ korab.markirovka or '—' }}</div>
+      </div>
+      <div class="detail-item">
+        <label>Позивна</label>
+        <div class="value">{{ korab.pozivna or '—' }}</div>
+      </div>
+      <div class="detail-item">
+        <label>Собственик</label>
+        <div class="value">{{ korab.sobstvenik }}</div>
+      </div>
+      <div class="detail-item">
+        <label>Капитан</label>
+        <div class="value">{{ korab.kapitan }}</div>
+      </div>
+      <div class="detail-item">
+        <label>Дължина</label>
+        <div class="value">
+          {% if korab.dalzhina %}{{ korab.dalzhina }} м
+            {% if korab.dalzhina > 10 %}<span class="badge badge-info">Задължителен дневник</span>{% endif %}
+          {% else %}—{% endif %}
+        </div>
+      </div>
+      <div class="detail-item">
+        <label>Ширина</label>
+        <div class="value">{{ korab.shirina ~ ' м' if korab.shirina else '—' }}</div>
+      </div>
+      <div class="detail-item">
+        <label>Тонаж</label>
+        <div class="value">{{ korab.tonazh ~ ' т' if korab.tonazh else '—' }}</div>
+      </div>
+      <div class="detail-item">
+        <label>Двигател</label>
+        <div class="value">{{ korab.dvigatel_moshnost or '—' }}</div>
+      </div>
+      <div class="detail-item">
+        <label>Гориво</label>
+        <div class="value">{{ korab.gorivo or '—' }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:1.25rem;">
+  <div class="card-header"><h2>📋 Разрешителни</h2></div>
+  <div class="table-wrap">
+    {% if razreshitelni %}
+    <table>
+      <thead><tr><th>Номер</th><th>Собственик</th><th>Валидно до</th><th>Статус</th></tr></thead>
+      <tbody>
+        {% for r in razreshitelni %}
+        <tr>
+          <td><strong>{{ r.nomer }}</strong></td>
+          <td>{{ r.sobstvenik }}</td>
+          <td>{{ r.validen_do }}</td>
+          <td>
+            {% if r.status == 'активно' %}
+              <span class="badge badge-success">Активно</span>
+            {% else %}
+              <span class="badge badge-danger">Отнето</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state"><div class="empty-icon">📋</div><p>Няма разрешителни за този кораб.</p></div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><h2>📓 Риболовен дневник</h2></div>
+  <div class="table-wrap">
+    {% if dnevnik %}
+    <table>
+      <thead><tr><th>Дата</th><th>Местоположение</th><th>Уреди</th><th>Улов</th><th>Вид риба</th></tr></thead>
+      <tbody>
+        {% for d in dnevnik %}
+        <tr>
+          <td>{{ d.data_nachalo }}</td>
+          <td>{{ d.mestopolozhenie }}</td>
+          <td>{{ d.uredi }}</td>
+          <td>{{ d.kolichestvo_ryba }} кг</td>
+          <td>{{ d.vid_ryba }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state"><div class="empty-icon">📓</div><p>Няма записи в дневника.</p></div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

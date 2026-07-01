@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Риболовен дневник{% endblock %}
+{% block page_title %}📓 Риболовен дневник{% endblock %}
+{% block page_subtitle %}Добавяне на запис за риболовна операция (само за кораби над 10м){% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header"><h2>Нов запис в дневника</h2></div>
+  <div class="card-body">
+
+    {% if koraби %}
+    <form method="POST">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Кораб *</label>
+          <select name="korab_id" required>
+            <option value="">-- Избери кораб (над 10м) --</option>
+            {% for k in koraби %}
+            <option value="{{ k.id }}">{{ k.mezhdunaroden_nomer }} — {{ k.markirovka or k.sobstvenik }} ({{ k.dalzhina }}м)</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Дата на излета *</label>
+          <input type="date" name="data_nachalo" required value="{{ today }}">
+        </div>
+        <div class="form-group span-2">
+          <label>Местоположение / Район *</label>
+          <input type="text" name="mestopolozhenie" required placeholder="Черно море, сектор C-12 / Яз. Бели Лом">
+        </div>
+        <div class="form-group span-2">
+          <label>Използвани уреди *</label>
+          <textarea name="uredi" required placeholder="Тралова мрежа, парагади..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Вид риба *</label>
+          <input type="text" name="vid_ryba" required placeholder="Цаца, Хамсия, Паламуд...">
+        </div>
+        <div class="form-group">
+          <label>Количество улов (кг) *</label>
+          <input type="number" step="0.1" name="kolichestvo_ryba" required placeholder="250.5">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success">✅ Добави запис</button>
+        <a href="/" class="btn btn-outline">Отказ</a>
+      </div>
+    </form>
+
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">⚓</div>
+      <p>Няма регистрирани кораби над 10м.</p>
+      <a href="/koraби/nov" class="btn btn-primary" style="margin-top:1rem;">Регистрирай кораб</a>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

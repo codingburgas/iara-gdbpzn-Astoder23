@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Кораби{% endblock %}
+{% block page_title %}⚓ Риболовни кораби{% endblock %}
+{% block page_subtitle %}Регистър на всички кораби с право на риболов{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+  <p style="color:var(--muted); font-size:0.875rem;">Общо: <strong>{{ koraби|length }}</strong> кораба</p>
+  <a href="/koraби/nov" class="btn btn-primary">+ Нов кораб</a>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    {% if koraби %}
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Международен №</th>
+          <th>Маркировка</th>
+          <th>Собственик</th>
+          <th>Капитан</th>
+          <th>Дължина</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for k in koraби %}
+        <tr>
+          <td style="color:var(--muted);">{{ k.id }}</td>
+          <td><strong>{{ k.mezhdunaroden_nomer }}</strong></td>
+          <td>{{ k.markirovka or '—' }}</td>
+          <td>{{ k.sobstvenik }}</td>
+          <td>{{ k.kapitan }}</td>
+          <td>
+            {% if k.dalzhina %}
+              {{ k.dalzhina }} м
+              {% if k.dalzhina > 10 %}
+                <span class="badge badge-info">Голям</span>
+              {% endif %}
+            {% else %}—{% endif %}
+          </td>
+          <td>
+            <a href="/koraби/{{ k.id }}" class="btn btn-sm btn-outline">Детайли</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">⚓</div>
+      <p>Няма регистрирани кораби.</p>
+      <a href="/koraби/nov" class="btn btn-primary" style="margin-top:1rem;">Добави първия кораб</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

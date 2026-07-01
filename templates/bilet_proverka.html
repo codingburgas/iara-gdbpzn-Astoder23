@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Проверка на билет{% endblock %}
+{% block page_title %}🔍 Проверка на билет{% endblock %}
+{% block page_subtitle %}Валидност на билет #{{ bilet.id }}{% endblock %}
+
+{% block content %}
+
+<div style="max-width:600px; margin:0 auto;">
+  <div class="card" style="text-align:center; overflow:hidden;">
+
+    <div style="padding:2.5rem 2rem; background:{% if validen %}linear-gradient(135deg,#1a7a4a,#2e9e6b){% else %}linear-gradient(135deg,#c0392b,#e74c3c){% endif %}; color:white;">
+      <div style="font-size:4rem; margin-bottom:0.5rem;">
+        {% if validen %}✅{% else %}❌{% endif %}
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif; font-size:1.75rem; font-weight:700;">
+        {% if validen %}ВАЛИДЕН БИЛЕТ{% else %}НЕВАЛИДЕН БИЛЕТ{% endif %}
+      </div>
+      <div style="opacity:0.85; margin-top:0.5rem; font-size:0.9rem;">
+        {% if validen %}Билетът е активен и важи.{% else %}Билетът е изтекъл или отнет.{% endif %}
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="detail-grid" style="text-align:left;">
+        <div class="detail-item">
+          <label>Притежател</label>
+          <div class="value">{{ bilet.ime }}</div>
+        </div>
+        <div class="detail-item">
+          <label>ЕГН</label>
+          <div class="value" style="font-family:monospace;">{{ bilet.egn }}</div>
+        </div>
+        <div class="detail-item">
+          <label>Тип билет</label>
+          <div class="value">{{ bilet.tip | capitalize }}</div>
+        </div>
+        <div class="detail-item">
+          <label>Категория</label>
+          <div class="value">{{ bilet.kategoriya | capitalize }}</div>
+        </div>
+        <div class="detail-item">
+          <label>Цена</label>
+          <div class="value">{% if bilet.cena == 0 %}Безплатен{% else %}{{ "%.2f"|format(bilet.cena) }} лв.{% endif %}</div>
+        </div>
+        <div class="detail-item">
+          <label>Валиден до</label>
+          <div class="value">{{ bilet.validen_do }}</div>
+        </div>
+        {% if bilet.telk_nomer %}
+        <div class="detail-item">
+          <label>ТЕЛК решение</label>
+          <div class="value">{{ bilet.telk_nomer }}</div>
+        </div>
+        {% endif %}
+      </div>
+
+      <div style="margin-top:1.5rem; display:flex; gap:1rem; justify-content:center;">
+        <a href="/bileti" class="btn btn-outline">← Всички билети</a>
+        <a href="/bileti/nov" class="btn btn-primary">+ Нов билет</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
